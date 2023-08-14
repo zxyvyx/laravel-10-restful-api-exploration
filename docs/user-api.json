@@ -3,7 +3,7 @@
     "info": {
         "title": "User API",
         "description": "User API",
-        "version": "1.0.0"
+        "version": "0.0.0"
     },
     "servers": [
         {

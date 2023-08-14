@@ -3,7 +3,7 @@
     "info": {
         "title": "Address API",
         "description": "Address API",
-        "version": "1.0.0"
+        "version": "0.0.0"
     },
     "servers": [
         {

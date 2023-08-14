@@ -3,7 +3,7 @@
     "info": {
         "title": "Contact API",
         "description": "Contact API",
-        "version": "1.0.0"
+        "version": "0.0.0"
     },
     "servers": [
         {
@@ -164,7 +164,7 @@
                 }
             }
         },
-        "/api/contats/{id}": {
+        "/api/contacts/{id}": {
             "put": {
                 "description": "Update contact by id",
                 "parameters": [
