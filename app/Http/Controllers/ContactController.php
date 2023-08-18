@@ -68,4 +68,27 @@ class ContactController extends Controller
 
         return new ContactResource($contact);
     }
+
+    public function delete(int $id): JsonResponse
+    {
+        $user = Auth::user();
+        $contact = Contact::where('id', $id)
+            ->where('userId', $user->id)->first();
+
+        if (!$contact) {
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    'message' => [
+                        'Contact not found'
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+
+        $contact->delete();
+
+        return response()->json([
+            'data' => true
+        ])->setStatusCode(200);
+    }
 }
