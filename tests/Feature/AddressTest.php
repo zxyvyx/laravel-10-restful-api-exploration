@@ -108,4 +108,72 @@ class AddressTest extends TestCase
             ]
         ]);
     }
+
+    public function testUpdateAddressSuccess()
+    {
+        $this->seed([UserSeeder::class, ContactSeeder::class, AddressSeeder::class]);
+        $address = Address::query()->limit(1)->first();
+
+        $this->put('/api/contacts/' . $address->contactId . '/addresses/' . $address->id, [
+            'street' => 'update test street',
+            'city' => 'update test city',
+            'province' => 'update test province',
+            'country' => 'update test country',
+            'postalCode' => '54321'
+        ], [
+            'Authorization' => 'test'
+        ])->assertStatus(200)->assertJson([
+            'data' => [
+                'street' => 'update test street',
+                'city' => 'update test city',
+                'province' => 'update test province',
+                'country' => 'update test country',
+                'postalCode' => '54321'
+            ]
+        ]);
+    }
+
+    public function testUpdateAddressFailedBadRequest()
+    {
+        $this->seed([UserSeeder::class, ContactSeeder::class, AddressSeeder::class]);
+        $address = Address::query()->limit(1)->first();
+
+        $this->put('/api/contacts/' . $address->contactId . '/addresses/' . $address->id, [
+            'street' => 'update test street',
+            'city' => 'update test city',
+            'province' => 'update test province',
+            'country' => '',
+            'postalCode' => '54321'
+        ], [
+            'Authorization' => 'test'
+        ])->assertStatus(400)->assertJson([
+            'errors' => [
+                'country' => [
+                    'The country field is required.'
+                ],
+            ]
+        ]);
+    }
+
+    public function testUpdateAddressFailedAddressNotFound()
+    {
+        $this->seed([UserSeeder::class, ContactSeeder::class, AddressSeeder::class]);
+        $address = Address::query()->limit(1)->first();
+
+        $this->put('/api/contacts/' . $address->contactId . '/addresses/' . ($address->id + 1), [
+            'street' => 'update test street',
+            'city' => 'update test city',
+            'province' => 'update test province',
+            'country' => 'update test country',
+            'postalCode' => '54321'
+        ], [
+            'Authorization' => 'test'
+        ])->assertStatus(404)->assertJson([
+            'errors' => [
+                'message' => [
+                    'Address not found'
+                ],
+            ]
+        ]);
+    }
 }
