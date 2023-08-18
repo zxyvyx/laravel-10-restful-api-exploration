@@ -123,4 +123,46 @@ class ContactTest extends TestCase
             ]
         ]);
     }
+
+    public function testUpdateSuccess()
+    {
+        $this->seed([UserSeeder::class, ContactSeeder::class]);
+        $contact = Contact::query()->limit(1)->first();
+
+        $this->put('/api/contacts/' . $contact->id, [
+            'firstName' => 'New John',
+            'lastName' => 'New Doe',
+            'email' => 'new_mail@mail.com',
+            'phone' => '08123456789',
+        ], [
+            'Authorization' => 'test'
+        ])->assertStatus(200)->assertJson([
+            'data' => [
+                'firstName' => 'New John',
+                'lastName' => 'New Doe',
+                'email' => 'new_mail@mail.com',
+                'phone' => '08123456789',
+            ]
+        ]);
+    }
+
+    public function testUpdateFailedBadRequest()
+    {
+        $this->seed([UserSeeder::class, ContactSeeder::class]);
+        $contact = Contact::query()->limit(1)->first();
+
+        $this->put('/api/contacts/' . $contact->id, [
+            'lastName' => 'New Doe',
+            'email' => 'new_mail@mail.com',
+            'phone' => '08123456789',
+        ], [
+            'Authorization' => 'test'
+        ])->assertStatus(400)->assertJson([
+            'errors' => [
+                'firstName' => [
+                    'The first name field is required.'
+                ],
+            ]
+        ]);
+    }
 }
