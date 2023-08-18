@@ -91,6 +91,16 @@
             },
             "get": {
                 "description": "Get all addresses for a contact",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header"
+                    },
+                    {
+                        "name": "idContact",
+                        "in": "path"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successfully get all addresses",
